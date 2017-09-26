@@ -1,0 +1,11 @@
+# http://EditorConfig.org
+
+[*]
+end_of_line = lf
+
+[*.{js,json,less,tpl}]
+indent_style = space
+indent_size = 3
+charset = utf-8
+insert_final_newline = true
+

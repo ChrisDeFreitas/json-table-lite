@@ -1,0 +1,32 @@
+{
+   "name": "json-table-lite",
+   "version": "0.0.1",
+   "description": "Simple JSON storage facility",
+   "private": false,
+   "author": "Jesse Tijnagel <jesse@guila.la>",
+   "contributors": [],
+   "license": "MIT",
+   "homepage": "http://guila.la",
+   "repository": {
+      "type": "git",
+      "url": "git@github.com:guilala/json-table-lite.git"
+   },
+   "keywords": [
+      "storage",
+      "table",
+      "db",
+      "sqlite",
+      "JSON"
+   ],
+   "dependencies": {
+      "better-sqlite3": "4.0.3"
+   },
+   "engines": {
+      "node": ">= 6.0.0"
+   },
+   "files": [
+      "index.js",
+      "LICENSE",
+      "README.md"
+   ]
+}
