@@ -24,7 +24,7 @@ Often in need of a fast, easy and lightweight, yet reliable way of storing data.
    * To much data in memory.
 
 ## Solution
-A simple one dimentional JSON parser wrapper around SQLite.
+A simple, one dimentional parser wrapper around sqlite3, for storing and retreiving JSON data.
 
 ## Why
 * SQLite and it's Node.js client are fast, lightweight and reliable.
