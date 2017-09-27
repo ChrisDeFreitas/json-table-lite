@@ -213,7 +213,7 @@ const removeById = function(json) {
          id = json.id;
       }
 
-      if(id.constructor === String) {
+      if(id.constructor === Number) {
          db.run("DELETE FROM jst WHERE ID = " + id, err => {
             if(err) reject(err);
             else resolve();
