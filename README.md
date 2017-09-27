@@ -49,7 +49,7 @@ The output should be something like this.
 [ { id: 1, age: 31, surname: 'Doe', name: 'Jane', town: null } ]
 ```
 
-A jtl.getProperties will at least return 'id'. This is the unique identifier index column of the SQLite column.
+A getProperties will at least return 'id'. This is the unique identifier index column of SQLite.
 The first output shows four properties because a first record has been stored with 'name', 'surname' and 'age'. You could also set a custom id as long as it's a unique integer.
 ```javascript
 [ 'id', 'age', 'surname', 'name' ]
