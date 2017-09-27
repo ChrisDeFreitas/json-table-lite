@@ -2,7 +2,7 @@
 Simple JSON storage facility for Node.js.
 
 ## Reason
-Often in need of fast, easy and lightweight, yet reliable way of storing JSON at back- end.
+Often in need of a fast, easy and lightweight, yet reliable way of storing data.
 
 ## What didn't work
 * Storing plain JSON files
