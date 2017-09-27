@@ -42,14 +42,13 @@ const addNewColumns = (json) => {
             }
          });
 
-         console.log("new columns", newColumnNames);
-
+         // console.log("new columns", newColumnNames);
          const addColumn = () => {
             var newColumn = newColumnNames.pop();
             if(newColumn) {
-               db.run("ALTER TABLE jst ADD COLUMN " + newColumn + " BLOB", err => {
-                  if(err) console.log("Add column", newColumn,  err);
-                  else addColumn();
+               db.run("ALTER TABLE jst ADD COLUMN " + newColumn + " BLOB", () => {
+                  // don't throw errors here: can be used parallel but cannot use IF NOT EXISTS
+                  addColumn();
                });
             } else {
                resolve();
@@ -200,6 +199,9 @@ const setMatch = function(json) {
             // insert
             insert(json).then(resolve, reject);
          }
+      }, ()=>{
+         // column mismatch
+         insert(json).then(resolve, reject);
       });
    });
 };
