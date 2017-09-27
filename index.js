@@ -146,10 +146,10 @@ const update = function(row, json) {
          setting.push(key + " = " + parsed.values[index]);
       });
       setting = setting.join(", ");
-      console.log("setting", setting);
+      // console.log("setting", "UPDATE jst SET " + setting + " WHERE ID = " + row.id);
 
       db.run("UPDATE jst SET " + setting + " WHERE ID = " + row.id, err => {
-         if(err) console.log("Insert row", err);
+         if(err) console.log("Update", err);
          else resolve();
       });
    });
@@ -158,7 +158,10 @@ const update = function(row, json) {
 const getMatch = function(json) {
    return new Promise((resolve, reject) => {
       var match = "";
-      if(json && json.constructor === Object) {
+      if(
+         json &&
+         Object.keys(json).length
+      ) {
          const parsed = parseToTable(json);
          match = [];
          parsed.keys.forEach((key, index) => {
@@ -186,48 +189,68 @@ const getMatchParsed = function(json) {
    });
 };
 
-const setMatch = function(json) {
+const setMatch = function(jsonToSet, jsonToMatch) {
    return new Promise((resolve, reject) => {
-      getMatch(json).then(rows => {
-         if(rows.length) {
-            const updates = [];
-            rows.forEach(row => {
-               updates.push(update(row, json));
-            });
-            Promise.all(updates).then(resolve, reject);
-         } else {
-            // insert
-            insert(json).then(resolve, reject);
-         }
-      }, ()=>{
-         // column mismatch
-         insert(json).then(resolve, reject);
-      });
+
+      // set new records
+      const newRecord = () => {
+         insert(jsonToSet).then(resolve, reject);
+      };
+
+      if (
+         jsonToMatch &&
+         Object.keys(jsonToMatch).length
+      ) {
+         getMatch(jsonToMatch).then(matches => {
+            if(matches.length) {
+               const updates = [];
+               matches.forEach(match => {
+                  updates.push(update(match, jsonToSet));
+               });
+
+               Promise.all(updates).then(resolve, reject);
+            } else {
+               // no match
+               newRecord();
+            }
+         }, ()=>{
+            // column mismatch
+            newRecord();
+         });
+      }
+
+      else {
+         // set without match
+         newRecord();
+      }
    });
 };
 
-const removeById = function(json) {
+const removeMatch = function(json) {
    return new Promise((resolve, reject) => {
-      var id = json;
-      if(json.constructor === Object && json.id) {
-         id = json.id;
-      }
+      getMatch(json).then((matches) => {
+         const deletions = [];
 
-      if(id.constructor === Number) {
-         db.run("DELETE FROM jst WHERE ID = " + id, err => {
-            if(err) reject(err);
-            else resolve();
+         matches.forEach(match => {
+            deletions.push(new Promise((resolve, reject) => {
+               db.run("DELETE FROM jst WHERE ID = " + match.id, err => {
+                  if(err) reject(err);
+                  else resolve();
+               });
+            }));
          });
-      } else reject("json.id or id string expected");
+
+         Promise.all(deletions).then(resolve, reject);
+      });
    });
 };
 
 module.exports = {
    close: closeDb,
-   getColumns: getColumns,
    get: getMatchParsed,
+   getProperties: getColumns,
    init: initDb,
-   set: setMatch,
-   remove: removeById
+   remove: removeMatch,
+   set: setMatch
 };
 
