@@ -87,19 +87,23 @@ const parseToTable = function(json) {
 
 const parseFromTable = function(row) {
    const result = {};
+
    Object.keys(row).forEach(key => {
       var val = row[key];
 
       // parse json strings
       if(
+         val &&
          val.constructor === String &&
          val.indexOf("JSN") === 0
       ) {
          val = JSON.parse(val.substring(3));
       }
 
-      result.key = val;
+      result[key] = val;
    });
+
+   return result;
 };
 
 const insertNewRow = (json) => {
@@ -154,17 +158,19 @@ const update = function(row, json) {
 
 const getMatch = function(json) {
    return new Promise((resolve, reject) => {
-      const parsed = parseToTable(json);
+      var match = "";
+      if(json && json.constructor === Object) {
+         const parsed = parseToTable(json);
+         match = [];
+         parsed.keys.forEach((key, index) => {
+            match.push(key + " = " + parsed.values[index]);
+         });
+         match = " WHERE " + match.join(" AND ");
+         // console.log("match", match);
+      }
 
-      var match = [];
-      parsed.keys.forEach((key, index) => {
-         match.push(key + " = " + parsed.values[index]);
-      });
-      match = match.join(" AND ");
-      console.log("match", match);
-
-      db.all("SELECT * FROM jst WHERE " + match, function(err, rows) {
-         console.log(JSON.stringify(rows));
+      db.all("SELECT * FROM jst" + match, function(err, rows) {
+         // console.log(JSON.stringify(rows));
          if(err) reject(err);
          else resolve(rows);
       });
