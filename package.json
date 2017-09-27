@@ -1,6 +1,6 @@
 {
    "name": "json-table-lite",
-   "version": "0.0.3",
+   "version": "0.0.4",
    "description": "Simple JSON storage facility",
    "private": false,
    "author": "Jesse Tijnagel <jesse@guila.la>",

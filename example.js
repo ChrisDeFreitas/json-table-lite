@@ -1,7 +1,17 @@
-const jtl = require(".");
-const fs = require('fs');
+/*!
+ * json-table-lite
+ * Copyright(c) 2017 Jesse Tijnagel (Guilala)
+ * MIT Licensed
+ */
 
-const testFile = "./test.db"; 
+/*jslint node: true */
+
+"use strict";
+
+const jtl = require(".");
+const fs = require("fs");
+
+const testFile = "./test.db";
 
 // delete old test file
 if(fs.existsSync(testFile)) fs.unlinkSync(testFile);
@@ -21,7 +31,7 @@ jtl.init("test.db")
 })
 
 .then(() => {
-   
+
    // get properties
    return jtl.getProperties();
 

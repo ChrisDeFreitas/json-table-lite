@@ -1,3 +1,13 @@
+/*!
+ * json-table-lite
+ * Copyright(c) 2017 Jesse Tijnagel (Guilala)
+ * MIT Licensed
+ */
+
+/*jslint node: true */
+
+"use strict";
+
 var sqlite3 = require("sqlite3").verbose();
 
 // global db
