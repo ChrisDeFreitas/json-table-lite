@@ -10,15 +10,12 @@
 
 var sqlite3 = require("sqlite3").verbose();
 
-// global db
-var db;
-
-// connect db and create table
+// connect this.db.and create table
 const initDb = (dbFile) => {
-   db = new sqlite3.Database(dbFile);
+   this.db = new sqlite3.Database(dbFile);
 
    return new Promise((resolve, reject) => {
-      db.run("CREATE TABLE IF NOT EXISTS jst (id INTEGER PRIMARY KEY UNIQUE)", err => {
+      this.db.run("CREATE TABLE IF NOT EXISTS jst (id INTEGER PRIMARY KEY UNIQUE)", err => {
          if(err) reject(err);
          else resolve();
       });
@@ -26,10 +23,11 @@ const initDb = (dbFile) => {
 };
 
 // get existing columns
-const getColumns = () => {
-   return new Promise((resolve) => {
-      db.all("PRAGMA table_info(jst)", (err, columns) => {
-            if(err) console.log("Column names", err);
+const getColumns = function() {
+   console.log("ab", this);
+   return new Promise((resolve, reject) => {
+      this.db.all("PRAGMA table_info(jst)", (err, columns) => {
+            if(err) reject(err);
             else {
                var columnNames = columns.map((column) => {
                   return column.name;
@@ -43,7 +41,7 @@ const getColumns = () => {
 // insert new columns
 const addNewColumns = (json) => {
    return new Promise((resolve) => {
-      getColumns().then((existingColumns)=>{
+      getColumns.call(this).then((existingColumns)=>{
          const newColumnNames = [];
 
          Object.keys(json).forEach(key => {
@@ -56,7 +54,7 @@ const addNewColumns = (json) => {
          const addColumn = () => {
             var newColumn = newColumnNames.pop();
             if(newColumn) {
-               db.run("ALTER TABLE jst ADD COLUMN " + newColumn + " BLOB", () => {
+               this.db.run("ALTER TABLE jst ADD COLUMN " + newColumn + " BLOB", () => {
                   // don't throw errors here: can be used parallel but cannot use IF NOT EXISTS
                   addColumn();
                });
@@ -119,7 +117,7 @@ const insertNewRow = (json) => {
    return new Promise((resolve) => {
       const parsed = parseToTable(json);
 
-      db.run("INSERT INTO jst (" + parsed.keys.join(",") + ") values (" + parsed.values.join() + ")", err => {
+      this.db.run("INSERT INTO jst (" + parsed.keys.join(",") + ") values (" + parsed.values.join() + ")", err => {
          if(err) console.log("Insert row", err);
          else resolve();
       });
@@ -129,7 +127,7 @@ const insertNewRow = (json) => {
 const closeDb = function() {
    return new Promise((resolve, reject) => {
       // close db
-      db.close((err)=> {
+      this.db.close((err)=> {
          if(err) reject(err);
          else {
             resolve();
@@ -141,8 +139,8 @@ const closeDb = function() {
 
 const insert = function(json) {
    return new Promise((resolve, reject) => {
-      addNewColumns(json)
-      .then(()=> { return insertNewRow(json); })
+      addNewColumns.call(this, json)
+      .then(()=> { return insertNewRow.call(this, json); })
       .then(resolve, reject);
    });
 };
@@ -158,7 +156,7 @@ const update = function(row, json) {
       setting = setting.join(", ");
       // console.log("setting", "UPDATE jst SET " + setting + " WHERE ID = " + row.id);
 
-      db.run("UPDATE jst SET " + setting + " WHERE ID = " + row.id, err => {
+      this.db.run("UPDATE jst SET " + setting + " WHERE ID = " + row.id, err => {
          if(err) console.log("Update", err);
          else resolve();
       });
@@ -181,7 +179,8 @@ const getMatch = function(json) {
          // console.log("match", match);
       }
 
-      db.all("SELECT * FROM jst" + match, function(err, rows) {
+      console.log("whatsthis", this.db);
+      this.db.all("SELECT * FROM jst" + match, function(err, rows) {
          // console.log(JSON.stringify(rows));
          if(err) reject(err);
          else resolve(rows);
@@ -191,7 +190,7 @@ const getMatch = function(json) {
 
 const getMatchParsed = function(json) {
    return new Promise((resolve, reject) => {
-      getMatch(json).then(rows => {
+      getMatch.call(this, json).then(rows => {
          resolve(rows.map(row => {
             return parseFromTable(row);
          }));
@@ -204,18 +203,18 @@ const setMatch = function(jsonToSet, jsonToMatch) {
 
       // set new records
       const newRecord = () => {
-         insert(jsonToSet).then(resolve, reject);
+         insert.call(this,jsonToSet).then(resolve, reject);
       };
 
       if (
          jsonToMatch &&
          Object.keys(jsonToMatch).length
       ) {
-         getMatch(jsonToMatch).then(matches => {
+         getMatch.call(this, jsonToMatch).then(matches => {
             if(matches.length) {
                const updates = [];
                matches.forEach(match => {
-                  updates.push(update(match, jsonToSet));
+                  updates.push(update.call(this, match, jsonToSet));
                });
 
                Promise.all(updates).then(resolve, reject);
@@ -238,12 +237,12 @@ const setMatch = function(jsonToSet, jsonToMatch) {
 
 const removeMatch = function(json) {
    return new Promise((resolve, reject) => {
-      getMatch(json).then((matches) => {
+      getMatch.call(this, json).then((matches) => {
          const deletions = [];
 
          matches.forEach(match => {
             deletions.push(new Promise((resolve, reject) => {
-               db.run("DELETE FROM jst WHERE ID = " + match.id, err => {
+               this.db.run("DELETE FROM jst WHERE ID = " + match.id, err => {
                   if(err) reject(err);
                   else resolve();
                });
@@ -255,12 +254,22 @@ const removeMatch = function(json) {
    });
 };
 
-module.exports = {
-   close: closeDb,
-   get: getMatchParsed,
-   getProperties: getColumns,
-   init: initDb,
-   remove: removeMatch,
-   set: setMatch
+module.exports = function() {
+   const ctx = {};
+   const set = function(target) {
+      return function() {
+         console.log("wrapper", ctx);
+         return target.apply(ctx, arguments);
+      };
+   };
+
+   return {
+      close: set(closeDb),
+      get: set(getMatchParsed),
+      getProperties: set(getColumns),
+      init: set(initDb), 
+      remove: set(removeMatch),
+      set: set(setMatch)
+   };
 };
 

@@ -11,18 +11,23 @@
 const jtl = require(".");
 const fs = require("fs");
 
-const testFile = "./test.db";
+const testFile1 = "./test1.db";
+const testFile2 = "./test2.db";
 
-// delete old test file
-if(fs.existsSync(testFile)) fs.unlinkSync(testFile);
+// delete old test files
+if(fs.existsSync(testFile1)) fs.unlinkSync(testFile1);
+if(fs.existsSync(testFile2)) fs.unlinkSync(testFile2);
 
 // load or create, and prepare SQLite file
-jtl.init("test.db")
+const store1 = new jtl;
+//const store2 = new jtl;
+
+store1.init(testFile1)
 
 .then(() => {
 
    // store an object
-   return jtl.set({
+   return store1.set({
       name: "Jane",
       surname: "Doe",
       age: 30
@@ -33,75 +38,76 @@ jtl.init("test.db")
 .then(() => {
 
    // get properties
-   return jtl.getProperties();
+   return store1.getProperties();
 
 })
 
-.then(properties => {
-   console.log(properties);
+// .then(properties => {
+//    console.log(properties);
 
-   // store second object
-   return jtl.set({
-      name: "John",
-      surname: "Doe",
-      age: 36,
-      town: "Brussels"
-   });
+//    // store second object
+//    return store1.set({
+//       name: "John",
+//       surname: "Doe",
+//       age: 36,
+//       town: "Brussels"
+//    });
 
-})
+// })
 
-.then(() => {
+// .then(() => {
 
-   // get properties again
-   return jtl.getProperties();
+//    // get properties again
+//    return store1.getProperties();
 
-})
+// })
 
-.then(properties => {
-   console.log(properties);
+// .then(properties => {
+//    console.log(properties);
 
-   // retreive Jane's record
-   return jtl.get({
-      name: "Jane"
-   });
+//    // retreive Jane's record
+//    console.log("example");
+//    return store1.get({
+//       name: "Jane"
+//    });
 
-})
+// })
 
-.then(records => {
-   console.log(records);
+// .then(records => {
+//    console.log(records);
 
-   // update Jane's record
-   return jtl.set({
-      age: 31
-   }, {
-      name: "Jane"
-   });
-})
+//    // update Jane's record
+//    return store1.set({
+//       age: 31
+//    }, {
+//       name: "Jane"
+//    });
+// })
 
-.then(() => {
+// .then(() => {
 
-   // retreive all records
-   return jtl.get();
+//    // retreive all records
+//    return store1.get();
 
-})
+// })
 
-.then(records => {
-   console.log(records);
+// .then(records => {
+//    console.log(records);
 
-   // delete John's record
-   return jtl.remove({
-      name: "John"
-   });
-})
+//    // delete John's record
+//    return store1.remove({
+//       name: "John"
+//    });
+// })
 
-.then(() => {
+// .then(() => {
 
-   // retreive all records again
-   return jtl.get();
+//    // retreive all records again
+//    return store1.get();
 
-})
+// })
 
-.then(records => {
-   console.log(records);
-});
+// .then(records => {
+//    console.log(records);
+// });
 
