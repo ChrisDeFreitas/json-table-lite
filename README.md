@@ -36,6 +36,7 @@ Clone source code from Github and run example.
 ```bash
 git clone git@github.com:guilala/json-table-lite.git
 cd json-table-lite
+npm i
 node example.js
 ```
 
