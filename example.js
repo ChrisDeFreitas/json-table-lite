@@ -19,7 +19,7 @@ if(fs.existsSync(testFile1)) fs.unlinkSync(testFile1);
 if(fs.existsSync(testFile2)) fs.unlinkSync(testFile2);
 
 // load or create, and prepare SQLite file
-const store1 = new jtl;
+const store1 = new jtl();
 //const store2 = new jtl;
 
 store1.init(testFile1)
@@ -40,7 +40,7 @@ store1.init(testFile1)
    // get properties
    return store1.getProperties();
 
-})
+});
 
 // .then(properties => {
 //    console.log(properties);
