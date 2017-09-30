@@ -14,6 +14,7 @@ var sqlite3 = require("sqlite3").verbose();
 const initDb = (dbFile) => {
    this.db = new sqlite3.Database(dbFile);
 
+   console.log("initDb this", this);
    return new Promise((resolve, reject) => {
       this.db.run("CREATE TABLE IF NOT EXISTS jst (id INTEGER PRIMARY KEY UNIQUE)", err => {
          if(err) reject(err);
@@ -24,7 +25,7 @@ const initDb = (dbFile) => {
 
 // get existing columns
 const getColumns = function() {
-   console.log("ab", this);
+   console.log("getColumns this", this);
    return new Promise((resolve, reject) => {
       this.db.all("PRAGMA table_info(jst)", (err, columns) => {
             if(err) reject(err);
@@ -200,10 +201,10 @@ const getMatchParsed = function(json) {
 
 const setMatch = function(jsonToSet, jsonToMatch) {
    return new Promise((resolve, reject) => {
-
+      console.log("setMach this", this, jsonToSet, jsonToMatch);
       // set new records
       const newRecord = () => {
-         insert.call(this,jsonToSet).then(resolve, reject);
+         insert.call(this, jsonToSet).then(resolve, reject);
       };
 
       if (
@@ -255,21 +256,20 @@ const removeMatch = function(json) {
 };
 
 module.exports = function() {
-   const ctx = {};
-   const set = function(target) {
-      return function() {
-         console.log("wrapper", ctx);
-         return target.apply(ctx, arguments);
-      };
+   const ctx = {
+      testcase: 1
+   };
+   const bindCtx = function(target) {
+      return target.bind(ctx);
    };
 
    return {
-      close: set(closeDb),
-      get: set(getMatchParsed),
-      getProperties: set(getColumns),
-      init: set(initDb), 
-      remove: set(removeMatch),
-      set: set(setMatch)
+      close: bindCtx(closeDb),
+      get: bindCtx(getMatchParsed),
+      getProperties: bindCtx(getColumns),
+      init: bindCtx(initDb), 
+      remove: bindCtx(removeMatch),
+      set: bindCtx(setMatch)
    };
 };
 

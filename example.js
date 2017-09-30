@@ -38,7 +38,7 @@ store1.init(testFile1)
 .then(() => {
 
    // get properties
-   return store1.getProperties();
+   //return store1.getProperties();
 
 });
 
