@@ -18,9 +18,9 @@ const testFile2 = "./test2.db";
 if(fs.existsSync(testFile1)) fs.unlinkSync(testFile1);
 if(fs.existsSync(testFile2)) fs.unlinkSync(testFile2);
 
-// load or create, and prepare SQLite file
+// load or create, and prepare SQLite db
 const store1 = new jtl();
-//const store2 = new jtl;
+const store2 = new jtl();
 
 store1.init(testFile1)
 
@@ -37,77 +37,99 @@ store1.init(testFile1)
 
 .then(() => {
 
-   // get properties
-   //return store1.getProperties();
+   // properties
+   return store1.getProperties();
 
+})
+
+.then(properties => {
+   console.log(properties);
+
+   // store second object
+   return store1.set({
+      name: "John",
+      surname: "Doe",
+      age: 36,
+      town: "Brussels"
+   });
+
+})
+
+.then(() => {
+
+   // get properties again
+   return store1.getProperties();
+
+})
+
+.then(properties => {
+   console.log(properties);
+
+   // retreive Jane's record
+   return store1.get({
+      name: "Jane"
+   });
+
+})
+
+.then(records => {
+   console.log(records);
+
+   // update Jane's record
+   return store1.set({
+      age: 31
+   }, {
+      name: "Jane"
+   });
+})
+
+.then(() => {
+
+   // retreive all records
+   return store1.get();
+
+})
+
+.then(records => {
+   console.log(records);
+
+   // delete John's record
+   return store1.remove({
+      name: "John"
+   });
+})
+
+.then(() => {
+
+   // retreive all records again
+   return store1.get();
+
+})
+
+.then(records => {
+   console.log(records);
 });
 
-// .then(properties => {
-//    console.log(properties);
+// run second instance in parallel
+store2.init(testFile2)
 
-//    // store second object
-//    return store1.set({
-//       name: "John",
-//       surname: "Doe",
-//       age: 36,
-//       town: "Brussels"
-//    });
+.then(() => {
 
-// })
+   // store an object
+   return store2.set({
+      furniture: ["chair", "table"]
+   });
 
-// .then(() => {
+})
 
-//    // get properties again
-//    return store1.getProperties();
+.then(() => {
 
-// })
+   // properties
+   return store2.getProperties();
 
-// .then(properties => {
-//    console.log(properties);
+})
 
-//    // retreive Jane's record
-//    console.log("example");
-//    return store1.get({
-//       name: "Jane"
-//    });
-
-// })
-
-// .then(records => {
-//    console.log(records);
-
-//    // update Jane's record
-//    return store1.set({
-//       age: 31
-//    }, {
-//       name: "Jane"
-//    });
-// })
-
-// .then(() => {
-
-//    // retreive all records
-//    return store1.get();
-
-// })
-
-// .then(records => {
-//    console.log(records);
-
-//    // delete John's record
-//    return store1.remove({
-//       name: "John"
-//    });
-// })
-
-// .then(() => {
-
-//    // retreive all records again
-//    return store1.get();
-
-// })
-
-// .then(records => {
-//    console.log(records);
-// });
+.then(properties => {
+   console.log(properties);
+});
 

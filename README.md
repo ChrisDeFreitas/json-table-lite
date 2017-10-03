@@ -42,6 +42,7 @@ node example.js
 
 The output should be something like this.
 ```javascript
+[ 'id', 'furniture' ]
 [ 'id', 'age', 'surname', 'name' ]
 [ 'id', 'age', 'surname', 'name', 'town' ]
 [ { id: 1, age: 30, surname: 'Doe', name: 'Jane', town: null } ]
@@ -51,7 +52,13 @@ The output should be something like this.
 ```
 
 A getProperties will at least return 'id'. This is the unique identifier index column of SQLite.
-The first output shows four properties because a first record has been stored with 'name', 'surname' and 'age'. You could also set a custom id as long as it's a unique integer.
+
+The first output shows two properties because a first record with the property 'furniture' has been stored in a db with file name 'test2.db'. This action started last in example.js, and runs asynchronous in parallel with the first. It outputs first because the record that gets stored is smaller.
+```javascript
+[ 'id', 'furniture' ]
+```
+
+The second output shows four properties because a first record with 'name', 'surname' and 'age' has been stored in a db with file name 'test1.db'. You could also set a custom id as long as it's a unique integer.
 ```javascript
 [ 'id', 'age', 'surname', 'name' ]
 ```

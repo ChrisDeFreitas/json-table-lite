@@ -11,10 +11,9 @@
 var sqlite3 = require("sqlite3").verbose();
 
 // connect this.db.and create table
-const initDb = (dbFile) => {
+const initDb = function(dbFile) {
    this.db = new sqlite3.Database(dbFile);
 
-   console.log("initDb this", this);
    return new Promise((resolve, reject) => {
       this.db.run("CREATE TABLE IF NOT EXISTS jst (id INTEGER PRIMARY KEY UNIQUE)", err => {
          if(err) reject(err);
@@ -25,7 +24,6 @@ const initDb = (dbFile) => {
 
 // get existing columns
 const getColumns = function() {
-   console.log("getColumns this", this);
    return new Promise((resolve, reject) => {
       this.db.all("PRAGMA table_info(jst)", (err, columns) => {
             if(err) reject(err);
@@ -40,7 +38,7 @@ const getColumns = function() {
 };
 
 // insert new columns
-const addNewColumns = (json) => {
+const addNewColumns = function(json) {
    return new Promise((resolve) => {
       getColumns.call(this).then((existingColumns)=>{
          const newColumnNames = [];
@@ -51,7 +49,6 @@ const addNewColumns = (json) => {
             }
          });
 
-         // console.log("new columns", newColumnNames);
          const addColumn = () => {
             var newColumn = newColumnNames.pop();
             if(newColumn) {
@@ -114,7 +111,7 @@ const parseFromTable = function(row) {
    return result;
 };
 
-const insertNewRow = (json) => {
+const insertNewRow = function(json) {
    return new Promise((resolve) => {
       const parsed = parseToTable(json);
 
@@ -132,7 +129,6 @@ const closeDb = function() {
          if(err) reject(err);
          else {
             resolve();
-            console.log("Close");
          }
       });
    });
@@ -155,7 +151,6 @@ const update = function(row, json) {
          setting.push(key + " = " + parsed.values[index]);
       });
       setting = setting.join(", ");
-      // console.log("setting", "UPDATE jst SET " + setting + " WHERE ID = " + row.id);
 
       this.db.run("UPDATE jst SET " + setting + " WHERE ID = " + row.id, err => {
          if(err) console.log("Update", err);
@@ -177,12 +172,9 @@ const getMatch = function(json) {
             match.push(key + " = " + parsed.values[index]);
          });
          match = " WHERE " + match.join(" AND ");
-         // console.log("match", match);
       }
 
-      console.log("whatsthis", this.db);
       this.db.all("SELECT * FROM jst" + match, function(err, rows) {
-         // console.log(JSON.stringify(rows));
          if(err) reject(err);
          else resolve(rows);
       });
@@ -201,7 +193,6 @@ const getMatchParsed = function(json) {
 
 const setMatch = function(jsonToSet, jsonToMatch) {
    return new Promise((resolve, reject) => {
-      console.log("setMach this", this, jsonToSet, jsonToMatch);
       // set new records
       const newRecord = () => {
          insert.call(this, jsonToSet).then(resolve, reject);
@@ -256,20 +247,13 @@ const removeMatch = function(json) {
 };
 
 module.exports = function() {
-   const ctx = {
-      testcase: 1
-   };
-   const bindCtx = function(target) {
-      return target.bind(ctx);
-   };
+   const ctx = {};
 
-   return {
-      close: bindCtx(closeDb),
-      get: bindCtx(getMatchParsed),
-      getProperties: bindCtx(getColumns),
-      init: bindCtx(initDb), 
-      remove: bindCtx(removeMatch),
-      set: bindCtx(setMatch)
-   };
+   this.close = closeDb.bind(ctx);
+   this.get = getMatchParsed.bind(ctx);
+   this.getProperties = getColumns.bind(ctx);
+   this.init = initDb.bind(ctx);
+   this.remove = removeMatch.bind(ctx);
+   this.set = setMatch.bind(ctx);
 };
 
