@@ -4,8 +4,5 @@
       "ecma5",
       "ecma6"
    ],
-   "loadEagerly": [
-      "./origin/**/*.js"
-   ],
    "ecmaVersion": 6
 }
