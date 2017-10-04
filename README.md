@@ -1,5 +1,5 @@
 # json-table-lite
-Simple JSON storage facility for Node.js.
+KISS JSON storage facility for Node.js.
 
 ## Reason
 Often in need of a fast, easy and lightweight, yet reliable way of storing data.
@@ -33,7 +33,7 @@ A simple, one dimentional parser wrapper around sqlite3, for storing and retreiv
 
 ## Faq
 * Why are there no features for handling multiple tables in one SQLite file?
-   * The idea behind this approach is storing a table of JSON data, not storing single values in relational tables.
+   * The idea behind this approach is storing a table of JSON data, and not so much storing single values in relational tables.
    * You can still handle relations between tables with Javascript just as easy (easier).
    * SQLite seems to block subsequent queries while it is writing. By using a separate file for each table, writing tables is non-blocking for others.
    * No SQL statement syntax please, and Keep It Simple, Stupid.
