@@ -8,7 +8,7 @@
 
 "use strict";
 
-var sqlite3 = require("sqlite3").verbose();
+const sqlite3 = require("sqlite3");
 
 // connect this.db.and create table
 const initDb = function(dbFile) {
@@ -76,13 +76,29 @@ const parseToTable = function(json) {
       result.keys.push(key);
       var val = json[key];
 
+      // numbers
       if(val.constructor === Number) {
          result.values.push(val);
-      } else if(val.constructor === String) {
-         result.values.push("'" + val + "'");
-      } else if(val.constructor === Object) {
-         result.values.push("'JSN" + JSON.stringify(val) + "'");
-      } else {
+      }
+
+      // strings
+      else if(val.constructor === String) {
+         result.values.push(
+            "'" + val.replace(/'/g, "''") + "'"
+         );
+      }
+
+      // onject and arrays
+      else if(
+         val.constructor === Object ||
+         val.constructor === Array
+      ) {
+         result.values.push(
+            "'JSN" + JSON.stringify(val).replace(/'/g, "''") + "'"
+         );
+      }
+
+      else {
          result.values.push("null");
       }
    });

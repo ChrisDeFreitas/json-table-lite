@@ -119,7 +119,8 @@ store2.init(testFile2)
 
    // store an object
    return store2.set({
-      furniture: ["chair", "table"]
+      furniture: ["chair", "table"],
+      chars: "Quote's"
    });
 
 })
