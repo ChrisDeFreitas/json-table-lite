@@ -1,7 +1,7 @@
 # json-table-lite
 KISS JSON storage facility for Node.js
 
-## Reason
+## Reality
 Often in need of a fast, easy and lightweight, yet reliable way of storing data.
 
 ## What didn't work
@@ -26,7 +26,7 @@ Often in need of a fast, easy and lightweight, yet reliable way of storing data.
 ## Solution
 A simple, one dimentional parser wrapper around sqlite3, for storing and retreiving JSON data.
 
-## Why
+## Reason
 * SQLite and it's Node.js client are fast, lightweight and reliable.
 * SQLite can be used decentralized.
 * Don't often need to search deeper than one level anyway.
