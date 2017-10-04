@@ -36,7 +36,7 @@ A simple, one dimentional parser wrapper around sqlite3, for storing and retreiv
    * The idea behind this approach is storing a table of JSON data, not storing single values in relational tables.
    * You can still handle relations between tables with Javascript just as easy (easier).
    * SQLite seems to block subsequent queries while it is writing. By using a separate file for each table, writing tables is non-blocking for others.
-   * Keep It Simple, Stupid.
+   * No SQL statement syntax please, Keep It Simple, Stupid.
 
 ## Todo
 * Count.
