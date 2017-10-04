@@ -112,11 +112,11 @@ const parseFromTable = function(row) {
 };
 
 const insertNewRow = function(json) {
-   return new Promise((resolve) => {
+   return new Promise((resolve, reject) => {
       const parsed = parseToTable(json);
 
       this.db.run("INSERT INTO jst (" + parsed.keys.join(",") + ") values (" + parsed.values.join() + ")", err => {
-         if(err) console.log("Insert row", err);
+         if(err) reject(err);
          else resolve();
       });
    });
@@ -127,9 +127,7 @@ const closeDb = function() {
       // close db
       this.db.close((err)=> {
          if(err) reject(err);
-         else {
-            resolve();
-         }
+         else resolve();
       });
    });
 };
