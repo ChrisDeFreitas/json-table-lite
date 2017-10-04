@@ -18,10 +18,11 @@ const testFile2 = "./test2.db";
 if(fs.existsSync(testFile1)) fs.unlinkSync(testFile1);
 if(fs.existsSync(testFile2)) fs.unlinkSync(testFile2);
 
-// load or create, and prepare SQLite db
+// context for two JSON tables
 const store1 = new jtl();
 const store2 = new jtl();
 
+// load or create, and prepare first JSON table
 store1.init(testFile1)
 
 .then(() => {
@@ -110,7 +111,8 @@ store1.init(testFile1)
    console.log(records);
 });
 
-// run second instance in parallel
+
+// load or create, and prepare a second JSON table in parallel
 store2.init(testFile2)
 
 .then(() => {
