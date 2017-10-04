@@ -41,6 +41,7 @@ A simple, one dimentional parser wrapper around sqlite3, for storing and retreiv
 ## Todo
 * Count.
 * Operators.
+* Tests.
 
 ## Example
 Clone source code from Github and run example.
