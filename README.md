@@ -44,7 +44,7 @@ A simple, one dimentional parser wrapper around sqlite3, for storing and retreiv
 * Tests.
 
 ## Example
-Clone source code from Github and run the [example](../blob/master/example.js).
+Clone source code from Github and run the [example](example.js).
 ```bash
 git clone git@github.com:guilala/json-table-lite.git
 cd json-table-lite
@@ -96,5 +96,5 @@ Last output shows all records after John's record has been deleted.
 [ { id: 1, age: 31, surname: 'Doe', name: 'Jane', town: null } ]
 ```
 
-Look into [example.js](../blob/master/example.js) to see how this has been achieved.
+Look into [example.js](example.js) to see how this has been achieved.
 
