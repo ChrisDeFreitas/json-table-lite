@@ -153,7 +153,7 @@ const update = function(row, json) {
       setting = setting.join(", ");
 
       this.db.run("UPDATE jst SET " + setting + " WHERE ID = " + row.id, err => {
-         if(err) console.log("Update", err);
+         if(err) reject(err);
          else resolve();
       });
    });
