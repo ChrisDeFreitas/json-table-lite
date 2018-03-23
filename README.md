@@ -10,10 +10,14 @@ Often in need of a fast, easy and lightweight, yet reliable way of storing data.
    * Not easy to use
    * Inefficient
    * To much data in memory
-* SQL
+* SQL server
+   * Sql syntax is so 80's
    * Not compatible with json data without extention
    * Overkill
    * To centralized
+* SQLite
+   * Sql syntax is so 80's
+   * Doesn't configure automatically
 * Mongodb
    * Tested several versions / years, but keeps eating to much cpu when idle
    * Overkill
@@ -28,12 +32,12 @@ Often in need of a fast, easy and lightweight, yet reliable way of storing data.
 ## Solution
 A simple, one dimentional parser wrapper around sqlite3, for storing and retreiving JSON data.
 
-## Reason
+## Assumptions
 * SQLite and it's Node.js client are fast, lightweight and reliable.
 * SQLite can be used decentralized.
 * Don't often need to search deeper than one level anyway.
 
-## But why
+## It doesn't
 * Why are there no features for handling multiple tables in one SQLite file?
    * The idea behind this approach is storing a table of JSON data, and not so much storing single values in relational tables.
    * You can still handle relations between tables with Javascript just as easy (easier).
@@ -42,7 +46,7 @@ A simple, one dimentional parser wrapper around sqlite3, for storing and retreiv
 
 ## Wish
 * Count
-* Operators
+* Basic operators
 * Unit tests
 
 ## Example
