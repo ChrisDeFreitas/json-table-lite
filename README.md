@@ -6,22 +6,24 @@ Often in need of a fast, easy and lightweight, yet reliable way of storing data.
 
 ## What didn't work
 * Storing plain JSON files
-   * To slow.
-   * Not easy to use.
-   * Inefficient.
-   * To much data in memory.
+   * To slow
+   * Not easy to use
+   * Inefficient
+   * To much data in memory
 * SQL
-   * Not compatible with json data without extention.
-   * Overkill.
-   * To centralized.
+   * Not compatible with json data without extention
+   * Overkill
+   * To centralized
 * Mongodb
-   * Tested several versions / years, but keeps eating to much cpu when idle.
-   * Overkill.
-   * To centralized.
+   * Tested several versions / years, but keeps eating to much cpu when idle
+   * Overkill
+   * To centralized
 * nedb, nedb-core, etc
-   * Unreliable.
-   * Not maintained.
-   * To much data in memory.
+   * Unreliable
+   * Not maintained
+   * To much data in memory
+* Realm
+   * not bad, wrong license
 
 ## Solution
 A simple, one dimentional parser wrapper around sqlite3, for storing and retreiving JSON data.
@@ -39,9 +41,9 @@ A simple, one dimentional parser wrapper around sqlite3, for storing and retreiv
    * No SQL statement syntax please, and Keep It Simple, Stupid.
 
 ## Wish
-* Count.
-* Operators.
-* Tests.
+* Count
+* Operators
+* Unit tests
 
 ## Example
 Clone source code from Github and run the [example](example.js).
