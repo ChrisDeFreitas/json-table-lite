@@ -1,6 +1,6 @@
 {
    "name": "json-table-lite",
-   "version": "0.1.6",
+   "version": "0.1.7",
    "description": "Simple JSON storage facility",
    "private": false,
    "author": "Jesse Tijnagel <jesse@guila.la>",
@@ -19,7 +19,7 @@
       "JSON"
    ],
    "dependencies": {
-      "sqlite3": "3.1.13"
+      "sqlite3": "4.0.0"
    },
    "engines": {
       "node": ">= 6.0.0"
